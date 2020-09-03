@@ -73,45 +73,32 @@
         }
 
         .form-group{
-            width: 400px;
-            margin: auto;
+            margin-top: 150px;
             text-align: center;
         }
 
         .search {
-            margin: auto;
+            margin-top: 3vh;
+            {#margin: auto;#}
             width: 10%;
             display: block;
             font-family: 'Jua', sans-serif;
-            top: 125%;
-            left: 41%;
-            position: absolute;
+            text-align: center;
         }
 
         #firstButton{
-            /*margin-top: 180px;*/
-            /*margin-bottom: 30px;*/
-            /*display: block;*/
-            /*margin: auto;*/
-            top: 165%;
-            left: 47.8%;
-            position: absolute;
             font-family: 'Jua', sans-serif;
         }
 
         #firstSearch{
             display: none;
-            top: 163%;
-            left: 37%;
-            position: absolute;
+            width: 400px;
+            margin: auto;
             /*margin: auto;*/
         }
 
         #firstSearchM{
             display: none;
-            top: 163%;
-            left: 37%;
-            position: absolute;
         }
 
         .dreamQ, .form-control{
@@ -137,7 +124,7 @@
             border-top-color: #fff;
             animation: spin 1s ease-in-out infinite;
             -webkit-animation: spin 1s ease-in-out infinite;
-            top: 126%;
+            top: 60%;
             left: 48.6%;
             position: absolute;
         }
@@ -185,8 +172,8 @@
             }
 
             .loading{
-                top: 40%;
-                left: 49%;
+                top: 32%;
+                left: 45%;
             }
 
         }
@@ -204,7 +191,7 @@
             text-align: center;
             font-size: 50px;
             font-family: 'Baloo Tamma 2', cursive;
-            margin-left: 15px;
+            /*margin-left: 15px;*/
         }
 
     </style>
@@ -233,7 +220,7 @@
                     success: function (response) {
                         if (response["result"] == "success") {
                             // location.href = "http://localhost:5000/1?q="+word
-                            location.href = "http://fortune-teller.shop/1?q="+word
+                            location.href = "http://3.34.1.253/1?q="+word
                         }
                     }
                 })
@@ -260,7 +247,7 @@
                     success: function (response) {
                         if (response["result"] == "success") {
                             // location.href = "http://localhost:5000/1?q="+word
-                            location.href = "http://fortune-teller.shop/1?q="+word
+                            location.href = "http://3.34.1.253/1?q="+word
                         }
                     }
                 })
@@ -279,18 +266,19 @@
 
         <div class="loading"></div>
 
-        <div class="search" id="firstButton">
-            <button onclick="firstClick()" type="button" class="btn btn-primary" id="hideButton">start</button>
-        </div>
-
-        <div id="firstSearch">
-            <div class="form-group">
+        <div class="form-group">
+            <div class="search" id="firstButton">
+                <button onclick="firstClick()" type="button" class="btn btn-primary" id="hideButton">start</button>
+            </div>
+            <div id="firstSearch">
                 <label class="dreamQ">어떤 꿈을 꾸셨나요? </label>
-                <input type="text" class="form-control" id="firstText" placeholder="키워드를 입력해주세요" onkeypress="press(event)">
+                <input type="text" class="form-control" id="firstText" placeholder="키워드를 입력해주세요"
+                       onkeypress="press(event)">
+                <div class="search">
+                    <button onclick="secondClick()" type="submit" class="btn btn-primary">search</button>
+                </div>
             </div>
-            <div class="search">
-                <button onclick="secondClick()" type="submit" class="btn btn-primary">search</button>
-            </div>
+
         </div>
 
     </div>
