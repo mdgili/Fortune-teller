@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Gamja+Flower&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet"> <!--버튼글꼴-->
+
+    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
+
+    <title>Fortune-teller</title>
+
+    <style>
+
+        body{
+            padding-top: 50px;
+        }
+
+        .wrap {
+            width: 700px;
+            margin: auto;
+            margin-top: 30px;
+        }
+
+        .topTitle {
+            background-color: white;
+            width: 100%;
+            height: 50px;
+        }
+
+        .img-with-text {
+            width: 100px;
+            text-align: center;
+            font-size: 14px;
+            font-family: 'Gamja Flower', cursive;
+            color: gray;
+            float: left;
+            margin: 6px 8px;
+        }
+
+        .img-with-text img {
+            margin: 0 auto;
+        }
+
+        .imageButton {
+            cursor: pointer;
+            /*opacity: 0.6;*/
+            /*transition: 0.3s;*/
+            background-color: white;
+        }
+
+        /*.imageButton:hover {opacity: 1}*/
+
+        .imageButton:active {
+            transform: translateY(3px);
+        }
+
+        .card {
+            margin-bottom: 30px;
+            font-family: 'Gamja Flower', cursive;
+            border-color: lightblue;
+        }
+
+        .card-title{
+            font-weight: bold;
+        }
+
+        .card-header{
+            font-weight: bold;
+            font-size: 18px;
+            background-color: aliceblue;
+        }
+
+        .topTitle {
+            background-color: aliceblue;
+            width: 100%;
+            height: 50px;
+            text-align: center;
+            position: fixed;
+            top: 0;
+            z-index: 99999;
+        }
+
+        .titleFont{
+            color: darkblue;
+            line-height: 50px;
+            left: 29%;
+            position: absolute;
+            float: left;
+            font-size: 19px;
+            font-family: 'Permanent Marker', cursive;
+        }
+
+        #titleBtn{
+            font-family: 'Jua', sans-serif;
+            display: block;
+            top: 0;
+            left: 90%;
+            position: absolute;
+        }
+
+        .btn-primary{
+            background-color: darkblue;
+            border-color: darkblue;
+        }
+
+        @media ( max-width: 811px ) {
+            #titleBtn{
+                display: none;
+            }
+            .wrap{
+                width: 350px;
+                margin-top: 0;
+            }
+            .titleFont{
+                left: 6%;
+            }
+
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+    </style>
+
+    <script>
+        // $(document).ready(function () {
+        // $(".imageButton").click(function () {
+        //     let buttonInfo = $(this).attr('value');
+        //     console.log(buttonInfo);
+        // });
+        // });
+
+        function appendAnimalFortune(title, content) {
+            let tempHTML =`<p class="card-title">${title}</p>
+                <p class="card-text">${content}</p>`
+            $('#animalluck-fortunes').append(tempHTML);
+            // $('html, body').scrollTop( $(document).height() );
+        }
+
+
+        //ajax 바꾸기
+        function updateAnimalLuck(animal) {
+            $('#animal-fortunes-wrapper').css('display', 'block');
+            $('#animalluck-fortunes-header').text(animal);
+
+            $.ajax({
+                type: "POST",
+                url: "/animalluck",
+                data: {animal: animal},
+                success: function (response) {
+                    if (response["result"] == "success") {
+                        let animals = response['animalFortunes'];
+                        let titles = ['오늘의 운세','내일의 운세','이주의 운세','이달의 운세'];
+                        for (let i = 0; i < animals.length; i++) {
+                            appendAnimalFortune(titles[i], animals[i]);
+                        }
+                    }
+                }
+            })
+        }
+
+
+        function animalButtonClicked(buttonName) {
+                $('#animalluck-fortunes').empty();
+                updateAnimalLuck(buttonName);
+        }
+
+
+
+        //3번째 복사 완료
+        function appendStarFortune(title, content) {
+            let tempHTML =`<p class="card-title">${title}</p>
+                <p class="card-text">${content}</p>`
+
+            $('#starluck-fortunes').append(tempHTML);
+            $('html, body').scrollTop( $(document).height() );
+        }
+
+
+        //2번째 복사 완료
+        function updateStarLuck(star) {
+            $('#starluck-fortunes-wrapper').css('display', 'block');
+            $('#starluck-fortunes-header').text(star);
+
+            $.ajax({
+                type: "POST",
+                url: "/starluck",
+                data: {star: star},
+                success: function (response) {
+                    if (response["result"] == "success") {
+                        let fortunes = response['fortunes'];
+                        let titles = ['오늘의 운세','내일의 운세','이주의 운세','이달의 운세'];
+                        for (let i = 0; i < fortunes.length; i++) {
+                            appendStarFortune(titles[i], fortunes[i]);
+                        }
+                    }
+                }
+            })
+        }
+
+        //1번째 복사 완료
+        function starButtonClicked(buttonName) {
+                $('#starluck-fortunes').empty();
+                updateStarLuck(buttonName);
+        }
+
+    </script>
+
+</head>
+<body>
+
+    <div class="topTitle">
+        <p class="titleFont" id="titleBtnFont">Please press the character button!</p>
+        <div id="titleBtn">
+            <button class="btn btn-primary" button type="button" onclick="window.scrollTo(0,0);" style="margin-top: 8px; padding-top: 3px; padding-bottom: 3px">TOP</button>
+        </div>
+    </div>
+
+    <div class="wrap">
+
+        <div>
+            <div class="img-with-text">
+                <button onclick="animalButtonClicked('쥐띠')" class="imageButton" type="button"
+                        style="padding:0; border:0; outline-color: white;">
+                    <img src="https://mblogthumb-phinf.pstatic.net/MjAyMDAyMjdfNjkg/MDAxNTgyODExNjE2NTUz.546Y1uDMLRi2YXphiGrphUkeKzU4vg-ZzNB7IR-mF7og.lip77TEqEe5xs2DnbKhSoS45-HkmBQjWc_k_czDSqPQg.PNG.iwishangel/SE-1b5ec505-4015-4d55-8496-56d151c57b3a.png?type=w800"
+                 alt="쥐띠" width="100" height="100">
+                </button>
+                <div>쥐띠</div>
+            </div>
+
+            <div class="img-with-text">
+                <button onclick="animalButtonClicked('소띠')" class="imageButton" type="button"
+                        style="padding:0; border:0; outline-color: white;">
+                    <img src="https://mblogthumb-phinf.pstatic.net/MjAyMDAyMjdfMTkx/MDAxNTgyODExNjE3NzYz.-xL9vUXD2lw2PuHToEbnUqQwInAOB_z5ZTd2ISgpK2Ag.DN2AnySp95RnQqNrAcor4u-BlvP99C8NxqI6CYNFIIgg.PNG.iwishangel/SE-edd699f0-baa0-42b2-a948-5cd302aa9a13.png?type=w800"
+                 alt="소띠" width="100" height="100">
+                </button>
+                <div>소띠</div>
+            </div>
+
+            <div class="img-with-text">
+                <button onclick="animalButtonClicked('호랑이띠')" class="imageButton" type="button"
+                        style="padding:0; border:0; outline-color: white;">
+                    <img src="https://mblogthumb-phinf.pstatic.net/MjAyMDAyMjdfMjY4/MDAxNTgyODExNjE5MTAw.we8W-wCbHzGppxpizm81U4wwwUyLgi5qs0sddFsKHuIg.5HzDPXCq2bkV9KauDrc122IoCpxarU1kF6iZj2Px708g.PNG.iwishangel/SE-cf82509c-f9ea-4cc7-8a14-3cd87c04639d.png?type=w800"
+                 alt="호랑이띠" width="100" height="100">
+                </button>
+                <div>호랑이띠</div>
+            </div>
+
+            <div class="img-with-text">
+                <button onclick="animalButtonClicked('토끼띠')" class="imageButton" type="button"
+                        style="padding:0; border:0; outline-color: white;">
+                    <img src="https://mblogthumb-phinf.pstatic.net/MjAyMDAyMjdfMTg3/MDAxNTgyODExNjIwNDk4.tEfy3MM0Vw-lbL7Pk4QGxJVJhIrNVO_-vlu79ZqLXcIg.5z0vM5hncIzxW4ACmGDOGo8JIAEyJ2nQBgYwRVBbkdwg.PNG.iwishangel/SE-e6984245-ebc4-4c09-814b-6445b7041aea.png?type=w800"
+                 alt="토끼띠" width="100" height="100">
+                </button>
+                <div>토끼띠</div>
+            </div>
+
+            <div class="img-with-text">
+                <button onclick="animalButtonClicked('용띠')" class="imageButton" type="button"
+                        style="padding:0; border:0; outline-color: white;">
+                    <img src="https://mblogthumb-phinf.pstatic.net/MjAyMDAyMjdfMTQx/MDAxNTgyODExNjIxNjk2.dScWdvsWbqVSWRfWjG0jU5mXydQsktW694cnG1HLUNgg.UIpBfN0YMsobIfzV_5R6e5rSP0H36PH8rAxHi_ILPSAg.PNG.iwishangel/SE-30c6808c-ccf0-43b9-b4b2-2533f7ebb36d.png?type=w800"
+                 alt="용띠" width="100" height="100">
+                </button>
+                <div>용띠</div>
+            </div>
+
+            <div class="img-with-text">
+                <button onclick="animalButtonClicked('뱀띠')" class="imageButton" type="button"
+                        style="padding:0; border:0; outline-color: white;">
+                    <img src="https://mblogthumb-phinf.pstatic.net/MjAyMDAyMjdfMTUw/MDAxNTgyODExNjIzMTM3.-jIEtmMqxUWqv3zN1P3fDBAfCYJOkVpMRYVVolvG6mIg.L4k4qnTszh0ih-LJ21ksp7KsdNPvTCdw7Gwon5SGQHMg.PNG.iwishangel/SE-94ac5c74-9f90-422b-a5b1-441b0d9d5108.png?type=w800"
+                 alt="뱀띠" width="100" height="100">
+                </button>
+                <div>뱀띠</div>
+            </div>
+
+            <div class="img-with-text">
+                <button onclick="animalButtonClicked('말띠')" class="imageButton" type="button"
+                        style="padding:0; border:0; outline-color: white;">
+                    <img src="https://mblogthumb-phinf.pstatic.net/MjAyMDAyMjdfMjUz/MDAxNTgyODExNjI0MzIx.Dzzm07egzDMyrqIm6afPntfBTykO7WTj7r4omKmycbEg.epLqbpIaA5MojTxHnfyBzj0KeyUL_aLuFfL_7aEUwEsg.PNG.iwishangel/SE-c5431117-7860-4788-9036-1379d61bc8b2.png?type=w800"
+                 alt="말띠" width="100" height="100">
+                </button>
+                <div>말띠</div>
+            </div>
+
+            <div class="img-with-text">
+                <button onclick="animalButtonClicked('양띠')" class="imageButton" type="button"
+                        style="padding:0; border:0; outline-color: white;">
+                    <img src="https://mblogthumb-phinf.pstatic.net/MjAyMDAyMjdfMTU5/MDAxNTgyODExNjI1NjAy.c22j4RCrIaehq-HJpQ8dVYstd3z6aGn0TP-2felE2wgg.LOk5T41RUYExzbZz9VhVSQSo1ZkN7LhmReSz9JBlHvYg.PNG.iwishangel/SE-ff8c382b-01f3-40a4-bdfb-adf554f828bc.png?type=w800"
+                 alt="양띠" width="100" height="100">
+                </button>
+                <div>양띠</div>
+            </div>
+
+            <div class="img-with-text">
+                <button onclick="animalButtonClicked('원숭이띠')" class="imageButton" type="button"
+                        style="padding:0; border:0; outline-color: white;">
+                    <img src="https://mblogthumb-phinf.pstatic.net/MjAyMDAyMjdfMjM4/MDAxNTgyODExNjI2ODQ4.5YrZ6QvS9turHsNs2vre8oP7lHfkGN3M9EIFYWWrZEMg.eGFn7ySnvl0FpnkosebKUfPSdNJv5XRbr67sftVwhHYg.PNG.iwishangel/SE-df1ba837-3a41-4835-a200-473277f404f8.png?type=w800"
+                 alt="원숭이띠" width="100" height="100">
+                </button>
+                <div>원숭이띠</div>
+            </div>
+
+            <div class="img-with-text">
+                <button onclick="animalButtonClicked('닭띠')" class="imageButton" type="button"
+                        style="padding:0; border:0; outline-color: white;">
+                    <img src="https://mblogthumb-phinf.pstatic.net/MjAyMDAyMjdfOTAg/MDAxNTgyODExNjI4MTIx.-9iN2dwACve2eYbjzLOqNou7w7TYA65LyKPAIt6RHLMg.Kd9V02oTDI_GrbYtCG6Y6gFbG6P8qAY_oYdD49WXaQwg.PNG.iwishangel/SE-b0e56700-64a1-4097-9c2a-b8289c5d5c1a.png?type=w800"
+                 alt="닭띠" width="100" height="100">
+                </button>
+                <div>닭띠</div>
+            </div>
+
+            <div class="img-with-text">
+                <button onclick="animalButtonClicked('개띠')" class="imageButton" type="button"
+                        style="padding:0; border:0; outline-color: white;">
+                    <img src="https://mblogthumb-phinf.pstatic.net/MjAyMDAyMjdfMjg4/MDAxNTgyODExNjI5NDYy.Nwh6K1REbeB36BMOFe0928mNhmEaBMq3bnIB9sYY-gUg.h7EMD835P5rL3OmOf6swyNoobXYsjsNMhBeF0E1M9PMg.PNG.iwishangel/SE-6927f1b0-ab87-4d7c-82b3-29c178c3f21c.png?type=w800"
+                 alt="개띠" width="100" height="100">
+                </button>
+                <div>개띠</div>
+            </div>
+
+            <div class="img-with-text">
+                <button onclick="animalButtonClicked('돼지띠')" class="imageButton" type="button"
+                        style="padding:0; border:0; outline-color: white;">
+                    <img src="https://mblogthumb-phinf.pstatic.net/MjAyMDAyMjdfMTE2/MDAxNTgyODExNjMwNjc5.5LYh0WqfmXkAp3UiwAHvh0RzilsaFaqrdHq5PCHFOSEg.EuO-xdqeUpxCqdsS1eyTCMV0kBkVCYZknnBRDKRkK_cg.PNG.iwishangel/SE-5c65db27-3cf9-486d-b347-0a07fc7495f1.png?type=w800"
+                 alt="돼지띠" width="100" height="100">
+                </button>
+                <div>돼지띠</div>
+            </div>
+        </div>
+
+        <p>&nbsp</p>
+
+        <div class="card" id="animal-fortunes-wrapper" style="display: none">
+            <div class="card-header" id="animalluck-fortunes-header">
+            </div>
+            <div class="card-body" id="animalluck-fortunes">
+            </div>
+        </div>
+
+        <div>
+            <div class="img-with-text">
+                <button onclick="starButtonClicked('물병자리')" class="imageButton" type="button"
+                        style="padding:0; border:0; outline-color: white;">
+                    <img src="https://search.pstatic.net/common?type=o&size=94x94&quality=90&direct=true&src=http%3A%2F%2Fsstatic.naver.net%2Fkeypage%2Foutside%2Fsign%2Fimg%2F20140305%2Fimg_b_sign01.png"
+                     alt="물병자리" width="100" height="100">
+                </button>
+                <div>물병자리</div>
+                <div>01/20 ~ 02/18</div>
+            </div>
+
+            <div class="img-with-text">
+                <button onclick="starButtonClicked('물고기자리')" class="imageButton" type="button"
+                        style="padding:0; border:0; outline-color: white;">
+                    <img src="https://search.pstatic.net/common?type=o&size=94x94&quality=90&direct=true&src=http%3A%2F%2Fsstatic.naver.net%2Fkeypage%2Foutside%2Fsign%2Fimg%2F20140305%2Fimg_b_sign02.png"
+                     alt="물고기자리" width="100" height="100">
+                </button>
+                <div>물고기자리</div>
+                <div>02/19 ~ 3/20</div>
+            </div>
+
+            <div class="img-with-text">
+                <button onclick="starButtonClicked('양자리')" class="imageButton" type="button"
+                        style="padding:0; border:0; outline-color: white;">
+                    <img src="https://search.pstatic.net/common?type=o&size=94x94&quality=90&direct=true&src=http%3A%2F%2Fsstatic.naver.net%2Fkeypage%2Foutside%2Fsign%2Fimg%2F20140305%2Fimg_b_sign03.png"
+                     alt="양자리" width="100" height="100">
+                </button>
+                <div>양자리</div>
+                <div>03/21 ~ 04/19</div>
+            </div>
+
+            <div class="img-with-text">
+                <button onclick="starButtonClicked('황소자리')" class="imageButton" type="button"
+                        style="padding:0; border:0; outline-color: white;">
+                    <img src="https://search.pstatic.net/common?type=o&size=94x94&quality=90&direct=true&src=http%3A%2F%2Fsstatic.naver.net%2Fkeypage%2Foutside%2Fsign%2Fimg%2F20140305%2Fimg_b_sign04.png"
+                     alt="황소자리" width="100" height="100">
+                </button>
+                <div>황소자리</div>
+                <div>04/20 ~ 05/20</div>
+            </div>
+
+            <div class="img-with-text">
+                <button onclick="starButtonClicked('쌍둥이자리')" class="imageButton" type="button"
+                        style="padding:0; border:0; outline-color: white;">
+                    <img src="https://search.pstatic.net/common?type=o&size=94x94&quality=90&direct=true&src=http%3A%2F%2Fsstatic.naver.net%2Fkeypage%2Foutside%2Fsign%2Fimg%2F20140305%2Fimg_b_sign05.png"
+                     alt="쌍둥이자리" width="100" height="100">
+                </button>
+                <div>쌍둥이자리</div>
+                <div>05/21 ~ 06/21</div>
+            </div>
+
+            <div class="img-with-text">
+                <button onclick="starButtonClicked('게자리')" class="imageButton" type="button"
+                        style="padding:0; border:0; outline-color: white;">
+                    <img src="https://search.pstatic.net/common?type=o&size=94x94&quality=90&direct=true&src=http%3A%2F%2Fsstatic.naver.net%2Fkeypage%2Foutside%2Fsign%2Fimg%2F20140305%2Fimg_b_sign06.png"
+                     alt="게자리" width="100" height="100">
+                </button>
+                <div>게자리</div>
+                <div>06/22 ~ 07/22</div>
+            </div>
+
+            <div class="img-with-text">
+                <button onclick="starButtonClicked('사자자리')" class="imageButton" type="button"
+                        style="padding:0; border:0; outline-color: white;">
+                    <img src="https://search.pstatic.net/common?type=o&size=94x94&quality=90&direct=true&src=http%3A%2F%2Fsstatic.naver.net%2Fkeypage%2Foutside%2Fsign%2Fimg%2F20140305%2Fimg_b_sign07.png"
+                     alt="사자자리" width="100" height="100">
+                </button>
+                <div>사자자리</div>
+                <div>07/23 ~ 08/22</div>
+            </div>
+
+            <div class="img-with-text">
+                <button onclick="starButtonClicked('처녀자리')" class="imageButton" type="button"
+                        style="padding:0; border:0; outline-color: white;">
+                    <img src="https://search.pstatic.net/common?type=o&size=94x94&quality=90&direct=true&src=http%3A%2F%2Fsstatic.naver.net%2Fkeypage%2Foutside%2Fsign%2Fimg%2F20140305%2Fimg_b_sign08.png"
+                     alt="처녀자리" width="100" height="100">
+                </button>
+                <div>처녀자리</div>
+                <div>08/23 ~ 09/23</div>
+            </div>
+
+            <div class="img-with-text">
+                <button onclick="starButtonClicked('천칭자리')" class="imageButton" type="button"
+                        style="padding:0; border:0; outline-color: white;">
+                    <img src="https://search.pstatic.net/common?type=o&size=94x94&quality=90&direct=true&src=http%3A%2F%2Fsstatic.naver.net%2Fkeypage%2Foutside%2Fsign%2Fimg%2F20140305%2Fimg_b_sign09.png"
+                     alt="천칭자리" width="100" height="100">
+                </button>
+                <div>천칭자리</div>
+                <div>09/24 ~ 10/22</div>
+            </div>
+
+            <div class="img-with-text">
+                <button onclick="starButtonClicked('전갈자리')" class="imageButton" type="button"
+                        style="padding:0; border:0; outline-color: white;">
+                    <img src="https://search.pstatic.net/common?type=o&size=94x94&quality=90&direct=true&src=http%3A%2F%2Fsstatic.naver.net%2Fkeypage%2Foutside%2Fsign%2Fimg%2F20140305%2Fimg_b_sign10.png"
+                     alt="전갈자리" width="100" height="100">
+                </button>
+                <div>전갈자리</div>
+                <div>10/23 ~ 11/22</div>
+            </div>
+
+            <div class="img-with-text">
+                <button onclick="starButtonClicked('사수자리')" class="imageButton" type="button"
+                        style="padding:0; border:0; outline-color: white;">
+                    <img src="https://search.pstatic.net/common?type=o&size=94x94&quality=90&direct=true&src=http%3A%2F%2Fsstatic.naver.net%2Fkeypage%2Foutside%2Fsign%2Fimg%2F20140305%2Fimg_b_sign11.png"
+                     alt="사수자리" width="100" height="100">
+                </button>
+                <div>사수자리</div>
+                <p>11/23 ~ 12/24</p>
+            </div>
+
+<!--            함수를 여러번 선헌하는 것보다 starButtonClicked('염소자리')이런 식으로-->
+            <div class="img-with-text">
+                <button onclick="starButtonClicked('염소자리')" class="imageButton" type="button"
+                        style="padding:0; border:0; outline-color: white;">
+                    <img src="https://search.pstatic.net/common?type=o&size=94x94&quality=90&direct=true&src=http%3A%2F%2Fsstatic.naver.net%2Fkeypage%2Foutside%2Fsign%2Fimg%2F20140305%2Fimg_b_sign12.png"
+                         alt="염소자리" width="100" height="100">
+                </button>
+                <div>염소자리</div>
+                <p>12/25 ~ 01/19</p>
+            </div>
+
+        </div>
+
+        <p>&nbsp</p>
+
+        <div class="card" id="starluck-fortunes-wrapper" style="display: none">
+            <div class="card-header" id="starluck-fortunes-header">
+            </div>
+            <div class="card-body" id="starluck-fortunes">
+            </div>
+        </div>
+
+    </div>
+
+
+</body>
+</html>

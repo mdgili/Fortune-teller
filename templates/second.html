@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Stylish&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&family=Ubuntu:wght@500&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet"> <!--버튼글꼴-->
+
+    <link href="https://fonts.googleapis.com/css2?family=Gamja+Flower&display=swap" rel="stylesheet">
+
+    <title>Fortune-teller</title>
+
+    <style>
+
+        body{
+            background-color: rgb(25, 31, 44);
+            padding-top: 50px;
+        }
+
+        .wrap{
+            width: 900px;
+            margin: auto;
+        }
+
+        .card-columns{
+            /*font-family: 'Stylish', sans-serif;*/
+            font-family: 'Gamja Flower', cursive;
+            color: white;
+            margin-top: 30px;
+        }
+
+        .topTitle {
+            background-color: rgb(39, 43, 56);
+            width: 100%;
+            height: 50px;
+            text-align: center;
+            position: fixed;
+            top: 0;
+            z-index: 99999;
+        }
+
+        .titleFont{
+            color: white;
+            line-height: 50px;
+            text-align: left;
+            padding-left: 330px;
+            float: left;
+            font-size: 18px;
+            font-family: 'Gamja Flower', cursive;
+        }
+
+        .secondTitle{
+            color: lightgray;
+            line-height: 50px;
+            float: left;
+            padding-left: 700px;
+            font-size: 14px;
+            font-family: 'Gamja Flower', cursive;
+
+        }
+
+        #titleBtn{
+            font-family: 'Jua', sans-serif;
+        }
+
+
+    </style>
+    <script>
+        $(document).ready(function () {
+            $("#cards-box").html("");
+            showArticles();
+        });
+
+        function showArticles() {
+            $.ajax({
+                type: "GET",
+                url: "/dream?q={{q}}",
+                data: {},
+                success: function (response) {
+                    if (response["result"] == "success") {
+                        let totals = response['allData'];
+                        for (let i = 0; i < totals.length; i++) {
+                            let total = totals[i];
+                            let title = total['title'];
+                            let url = total['url'];
+                            let comment = total['comment'];
+                            let day = total['day'];
+                            let word = total['search_word'];
+
+                            makeCard(title, url, comment, day);
+                            makeTitle(word);
+                        }
+                    }
+                }
+            })
+        }
+
+        function makeCard(title, url, comment, day) {
+            let cardThemes = ['primary', 'secondary', 'success', 'danger', 'info', 'warning', 'dark']
+            let borderColors = []
+            let randomIndex = Math.floor(Math.random() * cardThemes.length)
+
+            let theme = cardThemes[randomIndex]
+            let border = borderColors[randomIndex]
+            //hex color picker 사용 및 기타
+
+                let tempHtml = `<div class="card" style="background-color: rgb(39, 43, 56)">
+                                    <div class="card-body">
+                                        <a href="${url}" class="card-title">
+                                            <p>${title}</p></a>
+                                        <p class="card-text">${comment}</p>
+                                        <p class="card-text"><small class="text-muted">${day}</small></p>
+                                    </div>
+                                </div>`;
+                                $('#cards-box').append(tempHtml);
+            }
+
+            function makeTitle(word) {
+
+                let tempHTML = `'${word}' 꿈에 대한 검색결과 입니다.`;
+                $('#titleBtnFont').text(tempHTML);
+
+            }
+
+
+    </script>
+
+</head>
+<body>
+    <div class="topTitle">
+        <p class="titleFont" id="titleBtnFont"></p>
+        <p class="secondTitle">띠별/별자리 운세 더보기</p>
+        <div id="titleBtn">
+            <button class="btn btn-primary" button type="button" onclick="location.href='http://localhost:5000/2'"
+                    style="margin-top: 9px; padding-top: 3px; padding-bottom: 3px">more
+            </button>
+<!--            <button class="btn btn-primary" button type="button" onclick="location.href='http://3.34.1.253/2'"-->
+<!--                    style="margin-top: 9px; padding-top: 3px; padding-bottom: 3px">more-->
+<!--            </button>-->
+        </div>
+    </div>
+
+    <div class="wrap">
+
+        <div id="cards-box" class="card-columns">
+            <div class="card">
+                <div class="card-body">
+                    <a href="https://blog.naver.com/skswjdtkd12?Redirect=Log&logNo=222020951189" class="card-title">
+                        <p>개꿈,개꿈해몽 어떤 뜻이었을까?</p></a>
+                    <p class="card-text">오늘은 개꿈 개꿈해몽에 대해서 포스팅을 해보겠습니다. 몸을 물리는 경우 주위의 안좋은 인연이나 사람때문에 좋지못한 일을 당할수 있거나
+                        다칠수 있습니다. 싸움을...</p>
+                    <p class="card-text"><small class="text-muted">2020.06.19. </small></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
