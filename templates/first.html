@@ -79,8 +79,9 @@
 
         .search {
             margin-top: 3vh;
-            {#margin: auto;#}
-            width: 10%;
+            margin-left: auto;
+            margin-right: auto;
+            width: 100%;
             display: block;
             font-family: 'Jua', sans-serif;
             text-align: center;
@@ -125,7 +126,8 @@
             animation: spin 1s ease-in-out infinite;
             -webkit-animation: spin 1s ease-in-out infinite;
             top: 60%;
-            left: 48.6%;
+            left: 50%;
+            margin: -20px 0 0 -20px;
             position: absolute;
         }
 
@@ -172,8 +174,7 @@
             }
 
             .loading{
-                top: 32%;
-                left: 45%;
+                top: 40%;
             }
 
         }
@@ -220,7 +221,7 @@
                     success: function (response) {
                         if (response["result"] == "success") {
                             // location.href = "http://localhost:5000/1?q="+word
-                            location.href = "http://3.34.1.253/1?q="+word
+                            location.href = "http://fortune-teller.shop/1?q="+word
                         }
                     }
                 })
@@ -247,7 +248,7 @@
                     success: function (response) {
                         if (response["result"] == "success") {
                             // location.href = "http://localhost:5000/1?q="+word
-                            location.href = "http://3.34.1.253/1?q="+word
+                            location.href = "http://fortune-teller.shop/1?q="+word
                         }
                     }
                 })
